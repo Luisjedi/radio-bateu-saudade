@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#251b35">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Rádio Bateu Saudade</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ min-height:100vh;
+ display:grid;
+ place-items:center;
+ padding:20px;
+ background:linear-gradient(145deg,#171126,#49305c);
+ color:white;
+ font-family:Arial,sans-serif;
+}
+
+.radio{
+ width:100%;
+ max-width:410px;
+ padding:30px 22px;
+ border-radius:28px;
+ background:#281e38;
+ text-align:center;
+ box-shadow:0 15px 50px #0009;
+}
+
+.logo{
+ width:130px;
+ height:130px;
+ margin:25px auto;
+ border-radius:50%;
+ background:linear-gradient(145deg,#f5d88b,#d99b50);
+ color:#35213e;
+ display:grid;
+ place-items:center;
+ font-size:38px;
+ font-weight:900;
+ border:5px solid #ffffff30;
+}
+
+h1{font-size:27px;margin:12px 0}
+.subtitle{color:#e8c98d;font-size:14px}
+.decades{
+ color:#f5d88b;
+ font-size:19px;
+ font-weight:bold;
+ margin:18px 0;
+}
+
+.player{
+ margin:25px 0;
+ padding:22px 16px;
+ background:#392b4b;
+ border-radius:18px;
+}
+
+button{
+ width:75px;
+ height:75px;
+ border:0;
+ border-radius:50%;
+ background:#e9c477;
+ color:#30203c;
+ font-size:30px;
+ cursor:pointer;
+}
+
+button:active{transform:scale(.96)}
+
+.status{
+ margin-top:15px;
+ font-size:14px;
+ color:#e8ddeb;
+}
+
+input[type=range]{
+ width:85%;
+ margin-top:18px;
+ accent-color:#e9c477;
+}
+
+.site{
+ display:inline-block;
+ margin-top:20px;
+ color:#f5d88b;
+ text-decoration:none;
+}
+
+footer{
+ font-size:12px;
+ color:#c9b9d3;
+ margin-top:25px;
+ line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+<main class="radio">
+
+ <div class="subtitle">A SUA RÁDIO DE FLASHBACK</div>
+
+ <div class="logo">BS</div>
+
+ <h1>Rádio Bateu Saudade</h1>
+
+ <div class="decades">ANOS 70 • 80 • 90</div>
+
+ <p class="subtitle">
+ Os sucessos que marcaram gerações
+ </p>
+
+ <section class="player">
+  <button id="play" aria-label="Reproduzir">▶</button>
+
+  <p class="status" id="status">
+   Toque no botão para ouvir ao vivo
+  </p>
+
+  <input
+   id="volume"
+   type="range"
+   min="0"
+   max="1"
+   step="0.01"
+   value="0.8"
+   aria-label="Volume">
+ </section>
+
+ <audio id="audio" preload="none">
+  <source
+   src="https://kauankubaski.stream.laut.fm/kauankubaski"
+   type="audio/mpeg">
+ </audio>
+
+ <a class="site"
+    href="https://www.radiobateusaudade.com.br/"
+    target="_blank"
+    rel="noopener">
+    Acessar site oficial da rádio
+ </a>
+
+ <footer>
+  Rádio Bateu Saudade<br>
+  Ribeirão Preto • São Paulo<br>
+  Transmissão pela internet
+ </footer>
+
+</main>
+
+<script>
+const audio = document.getElementById('audio');
+const play = document.getElementById('play');
+const status = document.getElementById('status');
+const volume = document.getElementById('volume');
+
+audio.volume = Number(volume.value);
+
+play.addEventListener('click', async () => {
+ if(audio.paused){
+  status.textContent = 'Conectando à transmissão...';
+
+  try{
+   await audio.play();
+   play.textContent = 'Ⅱ';
+   status.textContent = 'Reproduzindo ao vivo';
+  }catch(error){
+   status.textContent =
+    'Não foi possível conectar. Tente novamente ou acesse o site oficial.';
+   play.textContent = '▶';
+  }
+ }else{
+  audio.pause();
+  play.textContent = '▶';
+  status.textContent = 'Transmissão pausada';
+ }
+});
+
+volume.addEventListener('input', () => {
+ audio.volume = Number(volume.value);
+});
+
+audio.addEventListener('playing', () => {
+ status.textContent = 'Reproduzindo ao vivo';
+ play.textContent = 'Ⅱ';
+});
+
+audio.addEventListener('waiting', () => {
+ status.textContent = 'Carregando transmissão...';
+});
+
+audio.addEventListener('error', () => {
+ status.textContent =
+  'Falha no sinal. Tente o site oficial da rádio.';
+ play.textContent = '▶';
+});
+
+if('serviceWorker' in navigator){
+ window.addEventListener('load', () => {
+  navigator.serviceWorker.register('./sw.js');
+ });
+}
+</script>
+</body>
+</html>
