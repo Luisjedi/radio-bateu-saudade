@@ -1,0 +1,20 @@
+
+{
+  "name": "Rádio Bateu Saudade",
+  "short_name": "Bateu Saudade",
+  "description": "Flashback dos anos 70, 80 e 90",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#251b35",
+  "theme_color": "#251b35",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
